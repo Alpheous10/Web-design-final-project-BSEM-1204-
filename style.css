@@ -1446,3 +1446,15 @@ img { max-width: 100%; display: block; }
   .hero-actions .btn-primary,
   .hero-actions .btn-outline { text-align: center; }
 }
+
+.district-select{
+    width:100%;
+    padding:11px 14px;
+    border:1px solid var(--border);
+    border-radius:var(--radius-sm);
+    font-size:14px;
+    font-family:var(--font-body);
+    color:var(--text-main);
+    background:var(--white);
+    outline:none;
+}
