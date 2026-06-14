@@ -84,30 +84,27 @@
 
           <div>
             <label>Phone Number or Email</label>
-
             <input
-              type="text"
-              placeholder="e.g. +232 76 000 000 or name@email.com"
-              required>
+            type="text"
+            id="loginEmail"
+            placeholder="e.g. +232 76 000 000 or name@email.com"
+            required>
+
+           <input
+            type="password"
+            id="loginPassword"
+            placeholder="Enter your password"
+            required>
+
+           <button type="button"
+             class="btn-primary"
+             onclick="loginUser()">
+             Sign In
+            </button>
+            
           </div>
 
-          <div>
-            <label>Password</label>
-
-            <input
-              type="password"
-              id="loginPassword"
-              placeholder="Enter your password"
-              required>
-          </div>
-
-          <a href="#" class="forgot-link">
-            Forgot password?
-          </a>
-
-          <button type="submit" class="btn-primary">
-            Sign In
-          </button>
+          
 
         </div>
 
@@ -135,26 +132,29 @@
             <label>Full Name</label>
 
             <input
-              type="text"
-              placeholder="e.g. Aminata Bangura"
-              required>
+            type="text"
+            id="fullName"
+            placeholder="e.g. Aminata Bangura"
+            required>
           </div>
 
           <div>
             <label>Phone Number</label>
 
-            <input
-              type="tel"
-              placeholder="+232 ..."
-              required>
+           <input
+           type="tel"
+           id="phone"
+           placeholder="+232 ..."
+           required>
           </div>
 
           <div>
             <label>Email Address (optional)</label>
 
             <input
-              type="email"
-              placeholder="name@email.com">
+            type="email"
+            id="email"
+            placeholder="name@email.com">
           </div>
 
           <div>
@@ -183,23 +183,26 @@
             <label>Password</label>
 
             <input
-              type="password"
-              id="registerPassword"
-              placeholder="Create a strong password"
-              required>
+            type="password"
+            id="registerPassword"
+            placeholder="Create a strong password"
+            required>
           </div>
 
           <div>
             <label>Confirm Password</label>
 
             <input
-              type="password"
-              id="confirmPassword"
-              placeholder="Repeat your password"
-              required>
+            type="password"
+            id="confirmPassword"
+            placeholder="Repeat your password"
+            required>
           </div>
 
-          <button type="submit" class="btn-primary">
+          <button
+            type="button"
+            class="btn-primary"
+            onclick="registerUser()">
             Create Account
           </button>
 
@@ -222,33 +225,105 @@
   <!-- JAVASCRIPT -->
   <script>
 
-    function showLogin() {
+function showLogin() {
 
-      document.getElementById("loginForm").style.display = "block";
-      document.getElementById("registerForm").style.display = "none";
+    document.getElementById("loginForm").style.display = "block";
+    document.getElementById("registerForm").style.display = "none";
 
-      document.getElementById("tabLogin").classList.add("active");
-      document.getElementById("tabRegister").classList.remove("active");
+    document.getElementById("tabLogin").classList.add("active");
+    document.getElementById("tabRegister").classList.remove("active");
+
+}
+
+function showRegister() {
+
+    document.getElementById("loginForm").style.display = "none";
+    document.getElementById("registerForm").style.display = "block";
+
+    document.getElementById("tabLogin").classList.remove("active");
+    document.getElementById("tabRegister").classList.add("active");
+
+}
+
+
+// CREATE ACCOUNT
+function registerUser() {
+
+    let fullName = document.getElementById("fullName").value;
+    let phone = document.getElementById("phone").value;
+    let email = document.getElementById("email").value;
+    let password = document.getElementById("registerPassword").value;
+    let confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (
+        fullName === "" ||
+        phone === "" ||
+        password === ""
+    ) {
+        alert("Please fill all required fields.");
+        return;
+    }
+
+    if (password !== confirmPassword) {
+        alert("Passwords do not match.");
+        return;
+    }
+
+    let user = {
+        fullName: fullName,
+        phone: phone,
+        email: email,
+        password: password
+    };
+
+    localStorage.setItem("user", JSON.stringify(user));
+
+    alert("Account created successfully!");
+
+    showLogin();
+}
+
+
+// LOGIN
+function loginUser() {
+
+    let loginEmail = document.getElementById("loginEmail").value;
+    let loginPassword = document.getElementById("loginPassword").value;
+
+    let storedUser = JSON.parse(localStorage.getItem("user"));
+
+    if (storedUser == null) {
+        alert("No account found. Please create an account.");
+        return;
+    }
+
+    if (
+        (loginEmail === storedUser.email ||
+        loginEmail === storedUser.phone)
+        &&
+        loginPassword === storedUser.password
+    ) {
+
+        alert("Login successful!");
+
+        window.location.href = "index.html";
+
+    } else {
+
+        alert("Invalid email/phone or password.");
 
     }
 
-    function showRegister() {
+}
 
-      document.getElementById("loginForm").style.display = "none";
-      document.getElementById("registerForm").style.display = "block";
 
-      document.getElementById("tabLogin").classList.remove("active");
-      document.getElementById("tabRegister").classList.add("active");
+document.getElementById("hamburger").addEventListener("click", function () {
 
-    }
+    document.getElementById("mobileMenu").classList.toggle("open");
 
-    document.getElementById("hamburger").addEventListener("click", function () {
+});
 
-      document.getElementById("mobileMenu").classList.toggle("open");
-
-    });
-
-  </script>
+</script>
 
 </body>
 </html>
