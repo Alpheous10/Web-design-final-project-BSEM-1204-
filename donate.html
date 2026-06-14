@@ -210,31 +210,31 @@
             <input type="tel" id="phoneNumber" placeholder="+232 ..."/>
           </div>
           <div class="form-field">
-            <label>District</label>
-            <select>
-              <option value="">Select district</option>
-              <option>Western Area Urban</option>
-              <option>Western Area Rural</option>
-              <option>Bo</option>
-              <option>Kenema</option>
-              <option>Makeni</option>
-              <option>Kono</option>
-              <option>Port Loko</option>
-              <option>Tonkolili</option>
-            </select>
-          </div>
+             <label>District</label>
+              <select id="district">
+               <option value="">Select district</option>
+               <option>Western Area Urban</option>
+               <option>Western Area Rural</option>
+               <option>Bo</option>
+               <option>Kenema</option>
+               <option>Makeni</option>
+               <option>Kono</option>
+               <option>Port Loko</option>
+               <option>Tonkolili</option>
+              </select>
+           </div>
           <div class="form-field">
             <label>Donation Type</label>
-            <select>
+            <select id="donationType">
               <option>Blood</option>
               <option>Medicines</option>
               <option>Equipment</option>
               <option>Financial</option>
             </select>
-          </div>
+         </div>
           <div class="form-field">
             <label>Blood Type (if donating blood)</label>
-            <select>
+            <select id="bloodType">
               <option value="">Select blood type</option>
               <option>O+</option>
               <option>O−</option>
@@ -251,7 +251,7 @@
             <textarea id="notes"placeholder="Any additional information about your donation..."></textarea>
           </div>
         </div>
-        <button class="btn-primary" style="width:100%; padding:14px; font-size:15px;">Submit Donation Registration</button>
+       <button class="btn-primary"style="width:100%; padding:14px; font-size:15px;"onclick="submitDonation()">Submit Donation Registration</button>
       </div>
     </div>
   </section>
@@ -285,27 +285,100 @@
     .stock-label.mid  { color:#F39C12; min-width:60px; }
     .stock-label.ok   { color:#1A8C6A; min-width:60px; }
   </style>
-
   <script>
-    function switchTab(btn, tabId) {
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+
+  // Switch donation tabs
+  function switchTab(btn, tabId) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+
+    ['blood', 'medicines', 'equipment', 'financial'].forEach(id => {
+      document.getElementById('tab-' + id).style.display =
+        (id === tabId) ? 'grid' : 'none';
+    });
+  }
+
+  // Scroll to donor form
+  function scrollToForm() {
+    document.getElementById('donorForm').scrollIntoView({
+      behavior: 'smooth'
+    });
+  }
+
+  // Blood type buttons
+  document.querySelectorAll('.blood-type-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.blood-type-btn')
+        .forEach(b => b.classList.remove('active'));
+
       btn.classList.add('active');
-      ['blood','medicines','equipment','financial'].forEach(id => {
-        document.getElementById('tab-' + id).style.display = (id === tabId) ? 'grid' : 'none';
-      });
-    }
-    function scrollToForm() {
-      document.getElementById('donorForm').scrollIntoView({ behavior: 'smooth' });
-    }
-    document.querySelectorAll('.blood-type-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.blood-type-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-      });
     });
-    document.getElementById('hamburger').addEventListener('click', function() {
-      document.getElementById('mobileMenu').classList.toggle('open');
+  });
+
+  // Hamburger menu (safe)
+  const hamburger = document.getElementById("hamburger");
+
+  if (hamburger) {
+    hamburger.addEventListener("click", function () {
+      document.getElementById("mobileMenu").classList.toggle("open");
     });
-  </script>
+  }
+
+  // Submit donor registration
+  function submitDonation() {
+
+    let firstName = document.getElementById("firstName").value.trim();
+    let lastName = document.getElementById("lastName").value.trim();
+    let phoneNumber = document.getElementById("phoneNumber").value.trim();
+    let district = document.getElementById("district").value;
+    let donationType = document.getElementById("donationType").value;
+    let bloodType = document.getElementById("bloodType").value;
+    let notes = document.getElementById("notes").value.trim();
+
+    if (
+      firstName === "" ||
+      lastName === "" ||
+      phoneNumber === "" ||
+      district === ""
+    ) {
+      alert("Please fill in all required fields.");
+      return;
+    }
+
+    let donor = {
+      firstName,
+      lastName,
+      phoneNumber,
+      district,
+      donationType,
+      bloodType,
+      notes
+    };
+
+    // Save to localStorage
+    let donors = JSON.parse(localStorage.getItem("donors")) || [];
+    donors.push(donor);
+    localStorage.setItem("donors", JSON.stringify(donors));
+
+    alert(
+      "✅ Donation registration successful!\n\n" +
+      "Name: " + firstName + " " + lastName +
+      "\nPhone: " + phoneNumber +
+      "\nDistrict: " + district +
+      "\nDonation Type: " + donationType
+    );
+
+    // Clear form
+    document.getElementById("firstName").value = "";
+    document.getElementById("lastName").value = "";
+    document.getElementById("phoneNumber").value = "";
+    document.getElementById("district").selectedIndex = 0;
+    document.getElementById("donationType").selectedIndex = 0;
+    document.getElementById("bloodType").selectedIndex = 0;
+    document.getElementById("notes").value = "";
+  }
+
+</script>
+
 </body>
 </html>
