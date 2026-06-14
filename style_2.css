@@ -1904,3 +1904,35 @@ img { max-width: 100%; display: block; }
   .hero-actions .btn-primary,
   .hero-actions .btn-outline { text-align: center; }
 }
+
+/* Doctor image container */
+.doctor-avatar{
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px;
+    border: 4px solid #1A8C6A;
+}
+
+/* Doctor image */
+.doctor-avatar img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.doctor-avatar{
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 20px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 4px solid #1A8C6A;
+}
+
+.doctor-avatar img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
