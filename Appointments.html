@@ -152,7 +152,7 @@
         <!-- Doctor 4 -->
         <div class="doctor-card">
           <div class="doctor-avatar">
-            
+            <img src="image/mustapha bayoh.jpg.jpeg" alt="Dr. Mustapha Bayoh">
           </div>
           <div class="doctor-info">
             <h3>Dr. Mustapha Bayoh</h3>
@@ -177,10 +177,10 @@
         <!-- Doctor 5 -->
         <div class="doctor-card">
           <div class="doctor-avatar">
-            <img src="image/" alt="">
+            <img src="image/sia.jpg.jpeg" alt="Dr. Sia Sesay">
           </div>
           <div class="doctor-info">
-            <h3>Dr. Sia Esso</h3>
+            <h3>Dr. Sia Sesay</h3>
             <span class="specialty-badge specialty-obgyn">Obstetrics & Gynecology</span>
             <p class="doctor-hospital">🏥 Mercy Hospital</p>
             <p class="doctor-bio">OB/GYN specialist dedicated to women's health, maternal care and safe deliveries across Sierra Leone.</p>
@@ -201,7 +201,9 @@
 
         <!-- Doctor 6 -->
         <div class="doctor-card">
-          <div class="doctor-avatar">RM</div>
+          <div class="doctor-avatar">
+            <img src="image/Richard.jpg.jpeg" alt="Dr. Richard Mansaray">
+          </div>
           <div class="doctor-info">
             <h3>Dr. Richard Mansaray</h3>
             <span class="specialty-badge specialty-dent">Dentistry</span>
@@ -234,12 +236,15 @@
       <p class="modal-sub">Fill in your details to complete the booking</p>
       <div class="modal-form">
         <label>Full Name</label>
-        <input type="text" placeholder="Your full name"/>
-        <label>Phone Number</label>
-        <input type="tel" placeholder="+232 ..."/>
-        <label>Reason for Visit</label>
-        <textarea placeholder="Brief description of your symptoms or reason..."></textarea>
-        <button class="btn-primary">Confirm Booking</button>
+        <input type="text" id="patientName" placeholder="Your full name">
+
+       <label>Phone Number</label>
+       <input type="tel" id="patientPhone" placeholder="+232 ...">
+
+       <label>Reason for Visit</label>
+       <textarea id="visitReason"placeholder="Brief description of your symptoms or reason..."></textarea>
+
+       <button class="btn-primary" onclick="confirmBooking()">Confirm Booking</button>
       </div>
     </div>
   </div>
@@ -263,23 +268,109 @@
   </footer>
 
   <script>
-    document.querySelectorAll('.btn-book').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.getElementById('bookingModal').classList.add('show');
-      });
+
+let selectedDoctor = "";
+
+// Open booking modal
+document.querySelectorAll(".btn-book").forEach(btn => {
+
+    btn.addEventListener("click", () => {
+
+        selectedDoctor =
+            btn.closest(".doctor-card")
+               .querySelector("h3").innerText;
+
+        document.getElementById("bookingModal")
+            .classList.add("show");
+
     });
-    document.getElementById('modalClose').addEventListener('click', () => {
-      document.getElementById('bookingModal').classList.remove('show');
+
+});
+
+
+// Close modal
+document.getElementById("modalClose").addEventListener("click", () => {
+
+    document.getElementById("bookingModal")
+        .classList.remove("show");
+
+});
+
+
+// Select available time slots
+document.querySelectorAll(".time-slot.available").forEach(slot => {
+
+    slot.addEventListener("click", () => {
+
+        document.querySelectorAll(".time-slot")
+            .forEach(s => s.classList.remove("selected"));
+
+        slot.classList.add("selected");
+
     });
-    document.querySelectorAll('.time-slot.available').forEach(slot => {
-      slot.addEventListener('click', () => {
-        document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
-        slot.classList.add('selected');
-      });
-    });
-    document.getElementById('hamburger').addEventListener('click', function() {
-      document.getElementById('mobileMenu').classList.toggle('open');
-    });
-  </script>
+
+});
+
+
+// Confirm booking
+function confirmBooking() {
+
+    let patientName =
+        document.getElementById("patientName").value;
+
+    let patientPhone =
+        document.getElementById("patientPhone").value;
+
+    let visitReason =
+        document.getElementById("visitReason").value;
+
+    if (
+        patientName === "" ||
+        patientPhone === "" ||
+        visitReason === ""
+    ) {
+
+        alert("Please fill in all fields.");
+        return;
+
+    }
+
+    let appointment = {
+
+        doctor: selectedDoctor,
+        patientName: patientName,
+        patientPhone: patientPhone,
+        visitReason: visitReason
+
+    };
+
+    localStorage.setItem(
+        "appointment",
+        JSON.stringify(appointment)
+    );
+
+    alert(
+        "Appointment booked successfully with " + selectedDoctor
+    );
+
+    document.getElementById("bookingModal")
+        .classList.remove("show");
+
+    document.getElementById("patientName").value = "";
+    document.getElementById("patientPhone").value = "";
+    document.getElementById("visitReason").value = "";
+
+}
+
+
+// Hamburger menu
+document.getElementById("hamburger").addEventListener("click", function () {
+
+    document.getElementById("mobileMenu")
+        .classList.toggle("open");
+
+});
+
+</script>
 </body>
 </html>
